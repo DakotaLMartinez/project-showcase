@@ -1,11 +1,22 @@
 import './App.css'
+import { NavLink } from 'react-router-dom';
+import ProjectsContainer from './projects/ProjectsContainer';
 
 function App() {
 
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <>
+      <nav className="bg-slate-50 py-4 flex items-center">
+        <h4 className="px-4 text-slate-800">
+          Project Showcase
+        </h4>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/projects">Projects</NavLink>
+        <NavLink to="/projects/new">New Project</NavLink>
+        <NavLink to="/about">About</NavLink>
+      </nav>
+      <ProjectsContainer />
+    </>
   )
 }
 

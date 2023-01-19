@@ -1,14 +1,26 @@
 import React     from 'react'
-import PropTypes from 'prop-types'
-import { Routes, Route } from 'react-router-dom'
+// import PropTypes from 'prop-types'
+import { Routes,Route } from 'react-router-dom'
 
-const ProjectsContainer = ({ args }) =>
-  <Routes>
-    
-  </Routes>
+const ProjectsContainer = ({ args }) => {
 
-ProjectsContainer.propTypes = {
-  
+  return (
+    <Routes>
+      Working 
+      <Route 
+        path="/"
+        element={<div>Working on home</div>}
+      />
+      <Route 
+        path="/projects/new"
+        element={<div>Working on Projects/new</div>}
+      />
+    </Routes>
+  )
 }
+
+// ProjectsContainer.propTypes = {
+  
+// }
 
 export default ProjectsContainer
