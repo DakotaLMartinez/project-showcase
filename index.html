@@ -11,14 +11,17 @@
     <script>
       function handleLogin(response) {
         console.log(response);
+        
       }
     </script>
     <script type="module" src="/src/main.jsx"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
-         data-client_id="390104298343-nb01a8stp4mav5nis3r6nckvgrsciv3v.apps.googleusercontent.com"
-         data-callback="handleLogin">
+      data-client_id="390104298343-nb01a8stp4mav5nis3r6nckvgrsciv3v.apps.googleusercontent.com"
+      data-context="signin"
+      data-callback="handleLogin"
+      data-auto_select="true"
+      data-itp_support="true">
     </div>
-    <div class="g_id_signin" data-type="standard"></div>
   </body>
 </html>
