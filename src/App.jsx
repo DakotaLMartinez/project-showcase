@@ -1,50 +1,22 @@
 import "./App.css";
-import { NavLink, Routes, Route } from "react-router-dom";
-import { RxAvatar } from "react-icons/rx";
-import classNames from "classnames";
-import toast, { Toaster } from "react-hot-toast";
-import { MdOutlineClose } from "react-icons/md";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { Routes, Route } from "react-router-dom";
+
+import { Toaster } from "react-hot-toast";
+
 import { useEffect } from "react";
 import ProjectsPage from "./pages/ProjectsPage";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Navbar from "./components/Navbar";
-import { useAuth } from "./context/AuthContext";
-
-const notify = (message) =>
-  toast.custom(
-    (t) => (
-      <div
-        className={classNames([
-          "flex flex-row items-center justify-between w-96 shadow-2xl bg-slate-700 text-slate-100 transition-all duration-500 relative",
-          t.visible ? "top-0" : "-top-96",
-        ])}
-      >
-        <div className="flex flex-col items-start justify-center ml-4 cursor-default py-4">
-          <IoMdNotificationsOutline />
-          <h1 className="text-base text-slate-200 font-semibold leading-none tracking-wider">
-            {message}
-          </h1>
-        </div>
-        <div
-          className="absolute top-2 right-2 cursor-pointer text-lg"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          <MdOutlineClose />
-        </div>
-      </div>
-    ),
-    { id: "authentication-notice", position: "top-center" }
-  );
+import { useNotifications } from "./context/NotificationContext";
 
 function App() {
-  const { authMessage } = useAuth();
+  const { notify, currentNotification } = useNotifications();
   useEffect(() => {
-    if (authMessage !== null) {
-      notify(authMessage);
+    if (currentNotification !== null) {
+      notify(currentNotification);
     }
-  }, [authMessage]);
+  }, [currentNotification]);
   return (
     <>
       <Navbar />

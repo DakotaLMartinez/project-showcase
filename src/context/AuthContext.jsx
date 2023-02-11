@@ -6,10 +6,8 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
-  const [authMessage, setAuthMessage] = useState(null);
 
   const login = async ({ email, password }) => {
-    
     const loginResponse = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
       method: "POST",
       headers: {
@@ -19,75 +17,111 @@ const AuthProvider = ({ children }) => {
     });
 
     if (loginResponse.ok) {
-      setToken(loginResponse.headers.get("Authorization"))
+      setToken(loginResponse.headers.get("Authorization"));
       setIsLoggedIn(true);
       const { status, data } = await loginResponse.json();
-      setAuthMessage(status.message);
       setCurrentUser(data);
-      return Promise.resolve(status.message);
+      return Promise.resolve({
+        type: "success",
+        message: status.message,
+      });
     } else {
-      const error = await loginResponse.text()
-      setAuthMessage(error);
-      return Promise.reject(error);
+      const error = await loginResponse.text();
+      return Promise.reject({ type: "error", message: error });
     }
   };
 
-  const signup = ({ email, password, password_confirmation }) => {
-    return fetch(`${import.meta.env.VITE_API_URL}/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: { email, password, password_confirmation },
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setToken(response.headers.get("Authorization"));
-          return response.json();
-        } else {
-          return Promise.reject(response.json());
+  const signup = async ({ email, password, password_confirmation }) => {
+    try {
+      const signupResponse = await fetch(
+        `${import.meta.env.VITE_API_URL}/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user: { email, password, password_confirmation },
+          }),
         }
-      })
-      .then(({ status, data }) => {
-        setAuthMessage(status.message);
+      );
+      if (signupResponse.ok) {
+        setToken(signupResponse.headers.get("Authorization"));
+        setIsLoggedIn(true);
+        const { status, data } = await signupResponse.json();
         setCurrentUser(data);
-      })
-      .catch(({ status: { code, message } }) => {
-        setAuthMessage(message);
+        return Promise.resolve({
+          type: "success",
+          message: status.message
+        })
+      } else {
+        setCurrentUser(null);
+        setIsLoggedIn(false);
+        setToken(null);
+        const {status: {code, message}} = await signupResponse.json();
+        return Promise.reject({
+          type: "error",
+          message
+        })
+      }
+    } catch (e) {
+      console.error(e)
+      return Promise.reject({
+        type: "error",
+        error: e,
+        message: "Something went wrong."
       });
+    }
   };
 
-  const logout = () => {
-    return fetch(`${import.meta.env.VITE_API_URL}/logout`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          setToken(null);
-          setCurrentUser(null);
-          return response.json();
-        } else {
-          return Promise.reject(response.json());
-        }
+  const logout = async () => {
+    // return fetch(`${import.meta.env.VITE_API_URL}/logout`, {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: token,
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (response.ok) {
+    //       setToken(null);
+    //       setCurrentUser(null);
+    //       return response.json();
+    //     } else {
+    //       return Promise.reject(response.json());
+    //     }
+    //   })
+    //   .then(({ message }) => {
+    //     setAuthMessage(message);
+    //   })
+    //   .catch(({ status: { code, message } }) => {
+    //     setAuthMessage(message);
+    //   });
+    const logoutResponse = await fetch(
+      `${import.meta.env.VITE_API_URL}/logout`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+    if (logoutResponse.ok) {
+      setToken(null);
+      setCurrentUser(null);
+      setIsLoggedIn(false);
+      const { message} = await logoutResponse.json()
+      return Promise.resolve({
+        type: "success",
+        message
       })
-      .then(({ message }) => {
-        setAuthMessage(message);
-      })
-      .catch(({ status: { code, message } }) => {
-        setAuthMessage(message);
-      });
+    }
   };
 
   const sharedValues = {
     isLoggedIn,
     currentUser,
-    authMessage,
     login,
     signup,
     logout,
