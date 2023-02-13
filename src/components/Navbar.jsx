@@ -79,8 +79,8 @@ function Navbar() {
         <NavLink end to="/projects">
           Projects
         </NavLink>
-        <NavLink end to="/projects/new">
-          New Project
+        <NavLink end to="/profile">
+          Profile
         </NavLink>
         <NavLink end to="/about">
           About

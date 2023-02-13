@@ -9,27 +9,32 @@ function Button({
   success,
   warning,
   danger,
+  className,
   ...rest
 }) {
-  const classes = classNames("flex items-center px-3 py-1 border", {
-    "border-slate-500": primary,
-    "border-gray-900": secondary,
-    "border-green-500": success,
-    "border-yellow-400": warning,
-    "border-red-500": danger,
-    "bg-slate-500 text-white": primary && !outline,
-    "bg-gray-900 text-white": secondary && !outline,
-    "bg-green-500 text-white": success && !outline,
-    "bg-yellow-400 text-white": warning && !outline,
-    "bg-red-500 text-white": danger && !outline,
-    "rounded-full": rounded,
-    "bg-white": outline,
-    "text-slate-500": outline && primary,
-    "text-gray-900": outline && secondary,
-    "text-green-500": outline && success,
-    "text-yellow-400": outline && warning,
-    "text-red-500": outline && danger,
-  });
+  const classes = classNames(
+    "flex items-center px-3 py-1 border",
+    {
+      "border-slate-500": primary,
+      "border-gray-900": secondary,
+      "border-green-500": success,
+      "border-yellow-400": warning,
+      "border-red-500": danger,
+      "bg-slate-500 text-white": primary && !outline,
+      "bg-gray-900 text-white": secondary && !outline,
+      "bg-green-500 text-white": success && !outline,
+      "bg-yellow-400 text-white": warning && !outline,
+      "bg-red-500 text-white": danger && !outline,
+      "rounded-full": rounded,
+      "bg-white": outline,
+      "text-slate-500": outline && primary,
+      "text-gray-900": outline && secondary,
+      "text-green-500": outline && success,
+      "text-yellow-400": outline && warning,
+      "text-red-500": outline && danger,
+    },
+    className
+  );
   return (
     <button className={classes} {...rest}>
       {children}

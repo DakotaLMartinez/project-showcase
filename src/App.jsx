@@ -9,9 +9,14 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Navbar from "./components/Navbar";
 import { useNotifications } from "./context/NotificationContext";
+import { useAuth } from "./context/AuthContext";
+import ProfilePage from "./pages/ProfilePage";
+import ProfileEditPage from "./pages/ProfileEditPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const { notify, currentNotification } = useNotifications();
+  const { isLoggedIn, currentUser } = useAuth();
   useEffect(() => {
     if (currentNotification !== null) {
       notify(currentNotification);
@@ -29,10 +34,14 @@ function App() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto py-8">
+      <section className="max-w-6xl mx-auto py-4 sm:py-8">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/*" element={<ProjectsPage />} />
+          <Route element={<ProtectedRoute isAllowed={isLoggedIn} />}>
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/edit" element={<ProfileEditPage />} />
+          </Route>
           <Route path="/about" element={<AboutPage />} />
         </Routes>
       </section>
