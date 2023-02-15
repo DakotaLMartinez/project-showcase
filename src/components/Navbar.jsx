@@ -73,18 +73,20 @@ function Navbar() {
     <nav className="bg-slate-50 py-4 flex items-center justify-between">
       <div className="flex items-center">
         <h4 className="px-4 text-slate-800">Project Showcase</h4>
-        <NavLink end to="/">
-          Home
-        </NavLink>
-        <NavLink end to="/projects">
-          Projects
-        </NavLink>
-        <NavLink end to="/profile">
-          Profile
-        </NavLink>
-        <NavLink end to="/about">
-          About
-        </NavLink>
+        <div className="hidden sm:block">
+          <NavLink end to="/">
+            Home
+          </NavLink>
+          <NavLink end to="/projects">
+            Projects
+          </NavLink>
+          <NavLink end to="/profile">
+            Profile
+          </NavLink>
+          <NavLink end to="/about">
+            About
+          </NavLink>
+        </div>
       </div>
 
       {!isLoggedIn ? (
