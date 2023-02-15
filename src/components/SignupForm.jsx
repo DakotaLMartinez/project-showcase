@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationContext";
 
 function SignupForm({ onFinish }) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,6 +20,7 @@ function SignupForm({ onFinish }) {
       .then((message) => {
         notify(message);
         onFinish();
+        navigate("/profile");
       })
       .catch(notify);
   };
