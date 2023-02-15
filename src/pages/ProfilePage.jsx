@@ -28,14 +28,27 @@ function ProfilePage() {
     return <a href="#">{link}</a>;
   });
 
+  const renderAvatar = () => {
+    if (currentUser.avatar_url) {
+      return (
+        <img
+          className="rounded-full w-44 h-44 object-cover"
+          src={currentUser.avatar_url}
+          alt="Profile picture"
+        />
+      );
+    }
+    return <RxAvatar className="text-9xl" />;
+  };
+
   const renderProjects = () => {
     return (
       <>
-        <h1>Projects</h1>
+        <h3 className="text-center sm:text-left border-b">Projects</h3>
         <section className="sm:grid sm:grid-cols-2 md:grid-cols-3">
           {currentUser.projects.map((project) => {
             return (
-              <article>
+              <article key={project.id}>
                 <h3>{project.name}</h3>
                 <img src={project.imageUrl} />
               </article>
@@ -47,16 +60,20 @@ function ProfilePage() {
   };
 
   return (
-    <div className="sm:grid sm:grid-cols-3">
+    <div className="sm:grid sm:grid-cols-3 mt-4">
       <aside className="flex flex-col justify-center items-center sm:items-start text-lg tracking-wide">
-        <RxAvatar className="text-9xl" />
-        <p>Name: </p>
-        <p>Email: {currentUser.email}</p>
+        <figure className="mb-4">{renderAvatar()}</figure>
+        <p>{currentUser.name || "your name here"}</p>
+        {currentUser.hide_email ? null : (
+          <p>
+            <a href={`mailto:${currentUser.email}`}>{currentUser.email}</a>
+          </p>
+        )}
 
-        <p className="flex gap-4 mt-2 text-2xl hover:fill-cyan-700">
+        <p className="flex gap-4 my-2 text-2xl hover:fill-cyan-700">
           {renderedLinks}
         </p>
-        <div className="">
+        <div className="mt-6">
           <Link className="flex items-center gap-2" to="/profile/edit">
             <Button>
               <MdEdit as={"button"} className="text-2xl" /> Edit Profile
@@ -64,11 +81,21 @@ function ProfilePage() {
           </Link>
         </div>
       </aside>
-      <section className="col-span-2">
+      <section className="sm:col-span-2">
         {currentUser.projects?.length ? (
           renderProjects()
         ) : (
-          <h3>No Projects Yet</h3>
+          <>
+            <h3 className="text-center sm:text-left border-b sm:mt-0 mt-6">
+              No Projects Yet
+            </h3>
+            <Link
+              to="/projects/new"
+              className="w-full mt-4 block text-center border py-2"
+            >
+              Add your first project
+            </Link>
+          </>
         )}
       </section>
     </div>
