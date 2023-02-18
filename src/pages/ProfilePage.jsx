@@ -6,27 +6,28 @@ import { MdEdit } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
+import ProjectCard from "../components/ProjectCard";
 
 function ProfilePage() {
   const { currentUser } = useAuth();
 
-  const socialLinks = [];
-  currentUser.github_url &&
-    socialLinks.push(
+  const githubLink = currentUser.github_url && (
+    <a href={currentUser.github_url} target="_blank" rel="noreferrer">
       <BsGithub className="fill-amber-50 hover:fill-amber-200 transition" />
-    );
-  currentUser.linkedin_url &&
-    socialLinks.push(
-      <BsLinkedin className="fill-amber-50 hover:fill-amber-200 transition" />
-    );
-  currentUser.twitter_url &&
-    socialLinks.push(
-      <BsTwitter className="fill-amber-50 hover:fill-amber-200 transition" />
-    );
+    </a>
+  );
 
-  const renderedLinks = socialLinks.map((link) => {
-    return <a href="#">{link}</a>;
-  });
+  const linkedinLink = currentUser.linkedin_url && (
+    <a href={currentUser.linkedin_url} target="_blank" rel="noreferrer">
+      <BsLinkedin className="fill-amber-50 hover:fill-amber-200 transition" />
+    </a>
+  );
+
+  const twitterLink = currentUser.twitter_url && (
+    <a href={currentUser.twitter_url} target="_blank" rel="noreferrer">
+      <BsTwitter className="fill-amber-50 hover:fill-amber-200 transition" />
+    </a>
+  );
 
   const renderAvatar = () => {
     if (currentUser.avatar_url) {
@@ -44,15 +45,10 @@ function ProfilePage() {
   const renderProjects = () => {
     return (
       <>
-        <h3 className="text-center sm:text-left border-b">Projects</h3>
-        <section className="sm:grid sm:grid-cols-2 md:grid-cols-3">
+        <h3 className="text-center sm:text-left border-b mb-4">Projects</h3>
+        <section className="px-0 sm:grid sm:grid-cols-2 md:grid-cols-3">
           {currentUser.projects.map((project) => {
-            return (
-              <article key={project.id}>
-                <h3>{project.name}</h3>
-                <img src={project.imageUrl} />
-              </article>
-            );
+            return <ProjectCard project={project} />;
           })}
         </section>
       </>
@@ -60,7 +56,7 @@ function ProfilePage() {
   };
 
   return (
-    <div className="sm:grid sm:grid-cols-3 mt-4">
+    <div className="sm:grid sm:grid-cols-3 xl:grid-cols-4 mt-4">
       <aside className="flex flex-col justify-center items-center sm:items-start text-lg tracking-wide">
         <figure className="mb-4">{renderAvatar()}</figure>
         <p>{currentUser.name || "your name here"}</p>
@@ -71,7 +67,9 @@ function ProfilePage() {
         )}
 
         <p className="flex gap-4 my-2 text-2xl hover:fill-cyan-700">
-          {renderedLinks}
+          {githubLink}
+          {linkedinLink}
+          {twitterLink}
         </p>
         <div className="mt-6">
           <Link className="flex items-center gap-2" to="/profile/edit">
@@ -81,7 +79,7 @@ function ProfilePage() {
           </Link>
         </div>
       </aside>
-      <section className="sm:col-span-2">
+      <section className="px-0 sm:col-span-2 xl:col-span-3">
         {currentUser.projects?.length ? (
           renderProjects()
         ) : (

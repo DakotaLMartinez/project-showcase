@@ -1,4 +1,5 @@
 import { useState, useContext, createContext } from "react";
+import { projects } from "../mocks/data";
 
 const AuthContext = createContext();
 
@@ -72,32 +73,35 @@ const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const logoutResponse = await fetch(
-      `${import.meta.env.VITE_API_URL}/logout`,
-      {
+      const logoutResponse = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
+      });
+      if (logoutResponse.ok) {
+        setToken(null);
+        setCurrentUser(null);
+        const { message} = await logoutResponse.json()
+        return Promise.resolve({
+          type: "success",
+          message
+        })
+      } else {
+        logoutUser();
       }
-    );
-    if (logoutResponse.ok) {
-      setToken(null);
-      setCurrentUser(null);
-      const { message} = await logoutResponse.json()
-      return Promise.resolve({
-        type: "success",
-        message
-      })
-    }
     } 
     catch (error) {
       console.error(error);
-      setToken(null);
-      setCurrentUser(null);
+      logoutUser();
     }
   };
+
+  const logoutUser = () => {
+    setToken(null);
+    setCurrentUser(null);
+  }
 
   const updateProfile = async (userFormData) => {
     try {
@@ -122,11 +126,21 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  const addProject = (project) => {
+    setCurrentUser(user => {
+      return {
+        ...user,
+        projects: [project, ...user.projects]
+      }
+    })
+  }
+
   const sharedValues = {
     token,
     updateProfile,
     isLoggedIn: !!currentUser,
     currentUser,
+    addProject,
     login,
     signup,
     logout,
