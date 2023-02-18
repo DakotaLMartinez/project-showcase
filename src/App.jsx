@@ -34,7 +34,7 @@ function App() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto py-4 sm:py-8">
+      <section className="max-w-6xl mx-auto py-4 sm:py-8 mt-6">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/projects/*" element={<ProjectsPage />} />
