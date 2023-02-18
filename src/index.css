@@ -34,7 +34,7 @@
   }
 
   section {
-    @apply px-4 sm:px-8 md:px-12;
+    @apply px-4 sm:px-8 md:px-12 max-w-6xl mx-auto;
   }
 
   nav a {
