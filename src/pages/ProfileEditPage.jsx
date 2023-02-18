@@ -191,7 +191,7 @@ function ProfileEditPage() {
               required: true,
             })}
             type="text"
-            placeholder="Your name here"
+            placeholder="Your email here"
             className={inputClasses("email")}
           />
           <div className="h-2">
