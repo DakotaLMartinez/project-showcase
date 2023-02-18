@@ -41,7 +41,7 @@ function ProfileMenu({ onFinish }) {
   return (
     <div className="w-44 flex flex-col" onClick={handleClick} ref={element}>
       <h6 className="border-b-2 border-slate-300">
-        Signed in as <strong>{currentUser?.email}</strong>
+        Signed in as <strong className="block truncate">{currentUser?.email}</strong>
       </h6>
       <div className="sm:hidden flex flex-col border-b border-slate-400 my-2 ">
         <Link onClick={onFinish} to="/">
