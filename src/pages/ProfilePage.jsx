@@ -7,26 +7,23 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "../components/ui/Button";
 import ProjectCard from "../components/ProjectCard";
+import GitHubLink from "../components/ui/GitHubLink";
+import LinkedInLink from "../components/ui/LinkedInLink";
+import TiwtterLink from "../components/ui/TwitterLink";
 
 function ProfilePage() {
   const { currentUser } = useAuth();
 
   const githubLink = currentUser.github_url && (
-    <a href={currentUser.github_url} target="_blank" rel="noreferrer">
-      <BsGithub className="fill-amber-50 hover:fill-amber-200 transition" />
-    </a>
+    <GitHubLink url={currentUser.github_url} />
   );
 
   const linkedinLink = currentUser.linkedin_url && (
-    <a href={currentUser.linkedin_url} target="_blank" rel="noreferrer">
-      <BsLinkedin className="fill-amber-50 hover:fill-amber-200 transition" />
-    </a>
+    <LinkedInLink url={currentUser.linkedin_url} />
   );
 
   const twitterLink = currentUser.twitter_url && (
-    <a href={currentUser.twitter_url} target="_blank" rel="noreferrer">
-      <BsTwitter className="fill-amber-50 hover:fill-amber-200 transition" />
-    </a>
+    <TiwtterLink url={currentUser.twitter_url} />
   );
 
   const renderAvatar = () => {
@@ -45,10 +42,10 @@ function ProfilePage() {
   const renderProjects = () => {
     return (
       <>
-        <h3 className="text-center sm:text-left border-b mb-4">Projects</h3>
-        <section className="px-0 sm:grid sm:grid-cols-2 md:grid-cols-3">
+        <h3 className="text-center md:text-left md:border-b mb-4">Projects</h3>
+        <section className="px-0 md:grid md:grid-cols-2 lg:grid-cols-3">
           {currentUser.projects.map((project) => {
-            return <ProjectCard project={project} />;
+            return <ProjectCard small project={project} />;
           })}
         </section>
       </>
@@ -56,13 +53,15 @@ function ProfilePage() {
   };
 
   return (
-    <div className="sm:grid sm:grid-cols-3 xl:grid-cols-4 mt-4">
-      <aside className="flex flex-col justify-center items-center sm:items-start text-lg tracking-wide">
+    <div className="md:grid md:grid-cols-3 mt-4">
+      <aside className="flex flex-col justify-center items-center md:items-start text-lg tracking-wide mb-4">
         <figure className="mb-4">{renderAvatar()}</figure>
         <p>{currentUser.name || "your name here"}</p>
         {currentUser.hide_email ? null : (
           <p>
-            <a href={`mailto:${currentUser.email}`}>{currentUser.email}</a>
+            <a href={`mailto:${currentUser.email}`}>
+              {currentUser.email}
+            </a>
           </p>
         )}
 
@@ -79,7 +78,7 @@ function ProfilePage() {
           </Link>
         </div>
       </aside>
-      <section className="px-0 sm:col-span-2 xl:col-span-3">
+      <section className="px-0 md:col-span-2">
         {currentUser.projects?.length ? (
           renderProjects()
         ) : (

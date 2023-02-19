@@ -6,7 +6,7 @@ import Button from './ui/Button';
 
 function ProjectsList({projects}) {
   return (
-    <div className="container">
+    <div>
       <h1 className="flex justify-between mb-4">
         <span>Projects</span>
         <Button 
