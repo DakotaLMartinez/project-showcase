@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ProjectsList from "../components/ProjectsList";
 import ProjectsNewPage from "./ProjectsNewPage";
+import ProjectDetailsPage from "./ProjectDetailsPage";
 
 const ProjectsContainer = ({ args }) => {
   const { isLoggedIn } = useAuth();
@@ -20,6 +21,7 @@ const ProjectsContainer = ({ args }) => {
   return (
     <Routes>
       <Route exact path="/" element={<ProjectsList projects={projects} />} />
+      <Route exact path="/:id" element={<ProjectDetailsPage />} />
       <Route element={<ProtectedRoute isAllowed={isLoggedIn} />}>
         <Route path="/new" element={<ProjectsNewPage />} />    
       </Route>
