@@ -38,14 +38,14 @@ function ProjectsNewPage() {
     handleSubmit,
   } = useForm({
     defaultValues: {
-      name: "Appointment Tracker",
+      name: "",
       about:
-        "A rails 6 application that can track appointments with multiple clients in multiple locations. ",
-      technologies: "Ruby on Rails, HTML, CSS, Ruby, RSpec, Capybara",
-      collaborators: "Joe Schmoe, Jane Doe",
-      live_demo_url: "https://rails-appointments.dakotaleemartinez.com",
-      code_url: "https://github.com/DakotaLMartinez/rails-appointments",
-      video_url: "https://www.youtube.com/watch?v=rJK_NEU-Qg0",
+        "",
+      technologies: "",
+      collaborators: "",
+      live_demo_url: "",
+      code_url: "",
+      video_url: "",
     },
     resolver: yupResolver(schema),
   });
