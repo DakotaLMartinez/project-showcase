@@ -45,7 +45,7 @@ function ProfilePage() {
         <h3 className="text-center md:text-left md:border-b mb-4">Projects</h3>
         <section className="px-0 md:grid md:grid-cols-2 lg:grid-cols-3">
           {currentUser.projects.map((project) => {
-            return <ProjectCard small project={project} />;
+            return <ProjectCard key={project.id} small project={project} />;
           })}
         </section>
       </>
