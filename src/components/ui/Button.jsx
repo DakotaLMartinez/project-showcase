@@ -23,7 +23,7 @@ function Button({
       "border-yellow-400": warning,
       "border-red-500": danger,
       "bg-slate-500 hover:bg-slate-600 text-white": primary && !outline,
-      "bg-gray-900 text-white": secondary && !outline,
+      "bg-slate-200 hover:bg-slate-300 text-slate-700": secondary && !outline,
       "bg-green-500 text-white": success && !outline,
       "bg-yellow-400 text-white": warning && !outline,
       "bg-red-500 text-white": danger && !outline,
