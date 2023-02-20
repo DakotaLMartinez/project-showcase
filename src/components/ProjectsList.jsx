@@ -18,7 +18,7 @@ function ProjectsList({projects}) {
       </h1>
       <section className="px-0 sm:grid sm:grid-cols-2 md:grid-cols-3">
         {projects.map((project) => (
-          <ProjectCard project={project} />
+          <ProjectCard key={project.id} project={project} />
         ))}
       </section>
     </div>
