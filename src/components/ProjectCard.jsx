@@ -9,11 +9,7 @@ function ProjectCard({ project, small = false }) {
     id,
     name,
     about,
-    live_demo_url,
     code_url,
-    video_url,
-    collaborators,
-    technologies,
     featured_image_url,
   } = project;
 
@@ -26,7 +22,6 @@ function ProjectCard({ project, small = false }) {
   const aboutText =
     shortAboutText === about ? about : `${shortAboutText.trim()}...`;
 
-  console.log(project);
   return (
     <article className="border-slate-50 border rounded-lg shadow-black shadow-md bg-slate-900 text-slate-100">
       <div className="px-4 pt-2">
