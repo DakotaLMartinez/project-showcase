@@ -150,6 +150,17 @@ const AuthProvider = ({ children }) => {
     })
   }
 
+  const deleteProject = (project) => {
+    setCurrentUser((user) => {
+      return {
+        ...user,
+        projects: user.projects.filter((p) => {
+          return p.id !== project.id
+        }),
+      };
+    });
+  };
+
   const sharedValues = {
     token,
     updateProfile,
@@ -157,6 +168,7 @@ const AuthProvider = ({ children }) => {
     currentUser,
     addProject,
     updateProject,
+    deleteProject,
     login,
     signup,
     logout,
