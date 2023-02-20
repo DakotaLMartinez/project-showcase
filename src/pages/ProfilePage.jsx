@@ -43,7 +43,7 @@ function ProfilePage() {
     return (
       <>
         <h3 className="text-center md:text-left md:border-b mb-4">Projects</h3>
-        <section className="px-0 md:grid md:grid-cols-2 lg:grid-cols-3">
+        <section className="px-0 md:grid md:grid-cols-2 xl:grid-cols-3 gap-2">
           {currentUser.projects.map((project) => {
             return <ProjectCard key={project.id} small project={project} />;
           })}
@@ -53,7 +53,7 @@ function ProfilePage() {
   };
 
   return (
-    <div className="md:grid md:grid-cols-3 mt-4">
+    <div className="md:grid md:grid-cols-3 xl:grid-cols-4 mt-4">
       <aside className="flex flex-col justify-center items-center md:items-start text-lg tracking-wide mb-4">
         <figure className="mb-4">{renderAvatar()}</figure>
         <p>{currentUser.name || "your name here"}</p>
@@ -76,7 +76,7 @@ function ProfilePage() {
           </Link>
         </div>
       </aside>
-      <section className="px-0 md:col-span-2 w-full">
+      <section className="px-0 md:col-span-2 xl:col-span-3 w-full">
         {currentUser.projects?.length ? (
           renderProjects()
         ) : (
