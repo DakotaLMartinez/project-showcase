@@ -5,11 +5,13 @@ import { useAuth } from "../context/AuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ProjectsList from "../components/ProjectsList";
 import ProjectsNewPage from "./ProjectsNewPage";
-import ProjectDetailsPage from "./ProjectDetailsPage";
+import ProjectDetailsPage from "./ProjectsDetailsPage";
+import ProjectsEditPage from "./ProjectsEditPage";
 
 const ProjectsContainer = ({ args }) => {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, currentUser } = useAuth();
   const [projects, setProjects] = useState([])
+  
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/projects`)
       .then((res) => res.json())
@@ -24,6 +26,7 @@ const ProjectsContainer = ({ args }) => {
       <Route exact path="/:id" element={<ProjectDetailsPage />} />
       <Route element={<ProtectedRoute isAllowed={isLoggedIn} />}>
         <Route path="/new" element={<ProjectsNewPage />} />    
+        <Route path="/:id/edit" element={<ProjectsEditPage />} />    
       </Route>
     </Routes>
   );
