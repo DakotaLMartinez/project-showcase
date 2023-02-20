@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotifications } from "../context/NotificationContext";
 import TagsInput from "../components/ui/TagsInput";
@@ -26,9 +26,10 @@ const schema = yup.object().shape({
   video_url: yup.string().url().nullable(),
 });
 
-function ProjectsNewPage() {
+function ProjectsEditPage() {
   const navigate = useNavigate();
-  const { addProject, token } = useAuth();
+  const { id } = useParams();
+  const { currentUser, updateProject, token } = useAuth();
   const { notify } = useNotifications();
   const {
     register,
@@ -36,18 +37,23 @@ function ProjectsNewPage() {
     watch,
     handleSubmit,
   } = useForm({
-    defaultValues: {
-      name: "",
-      about:
-        "",
-      live_demo_url: "",
-      code_url: "",
-      video_url: "",
-    },
+    defaultValues: async () =>
+      (await fetch(`${import.meta.env.VITE_API_URL}/projects/${id}`)).json(),
     resolver: yupResolver(schema),
   });
-  const [technologies, setTechnologies] = useState([]);
-  const [collaborators, setCollaborators] = useState([]);
+  const project = currentUser.projects.find((p) => p.id === parseInt(id));
+  const [technologies, setTechnologies] = useState(project.technologies);
+  const [collaborators, setCollaborators] = useState(project.collaborators);
+
+
+  if (!project) {
+    navigate(-1);
+    notify({
+      type: "error",
+      message: "Can't edit a project that doesn't belong to you",
+    });
+    return <div></div>;
+  }
 
   const featured_image = watch("featured_image");
 
@@ -61,48 +67,50 @@ function ProjectsNewPage() {
     formData.append("live_demo_url", data.live_demo_url);
     formData.append("code_url", data.code_url);
     formData.append("video_url", data.video_url);
-    technologies.forEach(technology => {
+    technologies.forEach((technology) => {
       formData.append("technologies[]", technology);
-    })
-    collaborators.trim().split(',').forEach(collaborator => {
+    });
+    collaborators.forEach((collaborator) => {
       formData.append("collaborators[]", collaborator);
-    })
-    
-    try {   
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/projects`, {
-        method: "POST",
+    });
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/projects/${id}`, {
+        method: "PATCH",
         headers: {
-          "Authorization": token
+          Authorization: token,
         },
         body: formData,
       });
       if (response.ok) {
         const project = await response.json();
-        addProject(project);
-        navigate("/profile")
+        updateProject(project);
+        navigate(`/projects/${id}`);
       } else {
         const error = await response.json();
         notify({
-          type: "error", message: error.message
-        })
+          type: "error",
+          message: error.message,
+        });
       }
     } catch (error) {
-      
+      console.error(error);
+      notify({
+        type: "error",
+        message: "Something wen't wrong"
+      });
     }
   };
 
   const inputClasses = (inputName) => {
-    return classNames(
-      "border outline-none focus:ring px-2 text-slate-700",
-      {
-        "border-red-400 focus:border-red-400 ring-red-400": errors[inputName],
-        "border-slate-400 focus:border-slate-400 ring-slate-400":
-          !errors[inputName],
-        "h-12": inputName !== "about",
-        "h-24 py-2": ["about"].includes(inputName),
-        "h-16 py-2": ["technologies", "collaborators"].includes(inputName)
-      }
-    );
+    return classNames("border outline-none focus:ring px-2 text-slate-700", {
+      "border-red-400 focus:border-red-400 ring-red-400": errors[inputName],
+      "border-slate-400 focus:border-slate-400 ring-slate-400":
+        !errors[inputName],
+      "h-12": inputName !== "about",
+      "h-24 py-2": ["about"].includes(inputName),
+      "h-16 py-2": ["technologies", "collaborators"].includes(inputName),
+    });
   };
 
   const renderError = ({ message }) => (
@@ -110,27 +118,32 @@ function ProjectsNewPage() {
   );
 
   const renderImage = () => {
+    let imgUrl = project.featured_image_url;
     let file = featured_image && featured_image[0];
-    let imgUrl = file && URL.createObjectURL(file);
     const validTypes = ["image/jpeg", "image/png"];
 
     if (!file) {
-      return renderPlaceholder();
+      return renderPictureOrFallback(imgUrl);
     }
     if (!validTypes.includes(file.type)) {
       return (
         <>
-          {renderPlaceholder()}
+          {renderPictureOrFallback(imgUrl)}
           <span>File must be a jpeg or png formatted image</span>
         </>
       );
     }
+    imgUrl = URL.createObjectURL(file);
     return (
       <>
         {renderFeaturedImage(imgUrl)}
         <span>{file.name}</span>
       </>
     );
+  };
+
+  const renderPictureOrFallback = (imgUrl) => {
+    return imgUrl ? renderFeaturedImage(imgUrl) : renderPlaceholder();
   };
 
   const renderPlaceholder = () => {
@@ -151,7 +164,7 @@ function ProjectsNewPage() {
 
   return (
     <section>
-      <h1 className="text-center mb-2">New Project</h1>
+      <h1 className="text-center mb-2">Edit Your Project</h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 max-w-lg mx-auto"
@@ -199,12 +212,12 @@ function ProjectsNewPage() {
             <ErrorMessage errors={errors} name="about" render={renderError} />
           </div>
         </label>
-       
+
         <label className="flex flex-col gap-1">
           <span>Technologies</span>
           <TagsInput state={[technologies, setTechnologies]} />
         </label>
-        
+
         <label className="flex flex-col gap-1">
           <span>Collaborators</span>
           <TagsInput state={[collaborators, setCollaborators]} />
@@ -266,4 +279,4 @@ function ProjectsNewPage() {
   );
 }
 
-export default ProjectsNewPage;
+export default ProjectsEditPage;

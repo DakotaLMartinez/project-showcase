@@ -135,12 +135,28 @@ const AuthProvider = ({ children }) => {
     })
   }
 
+  const updateProject = (project) => {
+    setCurrentUser(user => {
+      return {
+        ...user,
+        projects: user.projects.map(p => {
+          if (p.id === project.id) {
+            return project;
+          } else {
+            return p;
+          }
+        })
+      }
+    })
+  }
+
   const sharedValues = {
     token,
     updateProfile,
     isLoggedIn: !!currentUser,
     currentUser,
     addProject,
+    updateProject,
     login,
     signup,
     logout,

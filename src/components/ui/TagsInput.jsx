@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useRef, useState } from "react";
 import Tag from "./Tag";
 
-function TagsInput({ state }) {
+function TagsInput({ state, initialValue=[] }) {
   const [tags, setTags] = state;
   const input = useRef();
   const [text, setText] = useState("");
@@ -21,30 +21,37 @@ function TagsInput({ state }) {
   };
 
   const onKeyUp = (e) => {
-    if (["Enter", ",", "Tab"].includes(e.key)) {
+    if (["Enter", ","].includes(e.key)) {
       e.preventDefault();
       if (e.target.value === "") { return }
       if (tags.includes(e.target.value)) {
-        setError("must be unique")
+        setError("must be unique");
       } else {
-        onAddTag(e.target.value.trim());
-        setText("");
+        convertInputToTag(e.target.value);
       }
     } else {
       setError("");
     }
   };
 
+  const convertInputToTag = (value) => {
+    onAddTag(value.trim());
+    setText("");
+  }
+
   const onKeyDown = (e) => {
-    if (["Enter",",","Tab","Backspace"].includes(e.key)) {
+    if (e.key === "Tab" && e.target.value && !tags.includes(e.target.value)) {
+      convertInputToTag(e.target.value);
+    }
+    if (["Enter",",","Backspace"].includes(e.key)) {
       if (e.key === "Backspace") {
-        e.target.value === "" && tags.length && onRemoveTag(tags[tags.length -1])
+        e.target.value === "" && tags.length && onRemoveTag(tags[tags.length - 1])
       } else {
         e.preventDefault();
       }
     }
   };
-
+  
   const onClick = (e) => {
     input.current.focus();
   };
