@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { LoaderIcon } from "react-hot-toast";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import GitHubLink from "../components/ui/GitHubLink";
 import VideoLink from "../components/ui/VideoLink";
 import LiveDemoLink from "../components/ui/LiveDemoLink";
 import { useNotifications } from "../context/NotificationContext";
+import { useAuth } from "../context/AuthContext";
 import Button from "../components/ui/Button";
 
 function ProjectDetailsPage() {
   const { id } = useParams();
+  const { currentUser, deleteProject, token } = useAuth();
   const navigate = useNavigate();
   const { notify } = useNotifications();
   const [project, setProject] = useState(null);
@@ -33,6 +35,41 @@ function ProjectDetailsPage() {
     fetchProject();
   }, []);
 
+  const handleDeleteProject = async (e) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/projects/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Authorization": token
+            }
+          }
+        );
+        if (response.ok) {
+          deleteProject(project);
+          navigate("/profile");
+          notify({
+            type: "success",
+            message: "Project deleted successfully",
+          });
+        } else {
+          notify({
+            type: "error",
+            message: `${response.statusText} - Couldn't delete that project'`,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+        notify({
+          type: "error",
+          message: "Couldn't delete that project",
+        });
+      }
+    }
+  };
+
   if (!project) {
     return <LoaderIcon />;
   }
@@ -48,23 +85,49 @@ function ProjectDetailsPage() {
     featured_image_url,
   } = project;
 
-  console.dir(project);
+  const renderPictureOrFallback = (imgUrl) => {
+    return imgUrl ? renderFeaturedImage(imgUrl) : renderPlaceholder();
+  };
+
+  const renderPlaceholder = () => {
+    return (
+      <img
+        className="p-4"
+        src="https://via.placeholder.com/850x450?text=No%20Image"
+      />
+    );
+  };
+
+  const renderFeaturedImage = (imgUrl) => {
+    return (
+      <img
+        className="p-2"
+        src={imgUrl}
+        alt="Featured Image"
+      />
+    );
+  };
+  
+
   return (
     <>
       <nav className="flex justify-between mb-2">
         <Button secondary rounded onClick={() => navigate(-1)}>
           Go Back
         </Button>
-        <Link to={`/projects/${id}/edit`}>
-          <Button rounded>
+        <div
+          className={project.user_id === currentUser?.id ? "flex" : "hidden"}
+        >
+          <Button as={Link} to={`/projects/${id}/edit`} secondary rounded>
             <FaPencilAlt className="mr-2" /> Edit Project
           </Button>
-        </Link>
+          <Button danger rounded onClick={handleDeleteProject}>
+            <FaTrash className="mr-2" /> Delete
+          </Button>
+        </div>
       </nav>
       <article className="px-2 pt-2 pb-8 flex flex-col items-center justify-center max-w-2xl mx-auto">
-        <figure className="max-w-xl">
-          <img src={featured_image_url} alt={`${name} screenshot`} />
-        </figure>
+        <figure className="max-w-xl">{renderPictureOrFallback(featured_image_url)}</figure>
 
         <div className="px-8 sm:px-16">
           <h1 className="mb-2 text-center">{name}</h1>
