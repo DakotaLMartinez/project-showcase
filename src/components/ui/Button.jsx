@@ -26,7 +26,7 @@ function Button({
       "bg-slate-200 hover:bg-slate-300 text-slate-700": secondary && !outline,
       "bg-green-500 text-white": success && !outline,
       "bg-yellow-400 text-white": warning && !outline,
-      "bg-red-500 text-white": danger && !outline,
+      "bg-red-500 hover:bg-red-600 text-white": danger && !outline,
       "rounded-full": round,
       "rounded-lg": rounded,
       "bg-white hover:bg-slate-100": outline,
