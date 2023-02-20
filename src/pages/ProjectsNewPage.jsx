@@ -64,7 +64,7 @@ function ProjectsNewPage() {
     technologies.forEach(technology => {
       formData.append("technologies[]", technology);
     })
-    collaborators.trim().split(',').forEach(collaborator => {
+    collaborators.forEach(collaborator => {
       formData.append("collaborators[]", collaborator);
     })
     
