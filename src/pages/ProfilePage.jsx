@@ -59,9 +59,7 @@ function ProfilePage() {
         <p>{currentUser.name || "your name here"}</p>
         {currentUser.hide_email ? null : (
           <p>
-            <a href={`mailto:${currentUser.email}`}>
-              {currentUser.email}
-            </a>
+            <a href={`mailto:${currentUser.email}`}>{currentUser.email}</a>
           </p>
         )}
 
@@ -78,20 +76,20 @@ function ProfilePage() {
           </Link>
         </div>
       </aside>
-      <section className="px-0 md:col-span-2">
+      <section className="px-0 md:col-span-2 w-full">
         {currentUser.projects?.length ? (
           renderProjects()
         ) : (
           <>
-            <h3 className="text-center sm:text-left border-b sm:mt-0 mt-6">
+            <h3 className="text-center sm:text-left border-b sm:mt-0 mt-6 w-full">
               No Projects Yet
             </h3>
-            <Link
-              to="/projects/new"
-              className="w-full mt-4 block text-center border py-2"
-            >
-              Add your first project
-            </Link>
+              <Link
+                to="/projects/new"
+                className="mt-8 inline-block text-center border py-2 px-4"
+              >
+                Add your first project
+              </Link>
           </>
         )}
       </section>
