@@ -16,7 +16,7 @@ function ProjectsList({projects}) {
           className="text-lg"
         >New Project</Button>
       </h1>
-      <section className="px-0 sm:grid sm:grid-cols-2 md:grid-cols-3">
+      <section className="px-0 sm:grid sm:grid-cols-2 md:grid-cols-3 gap-2">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
