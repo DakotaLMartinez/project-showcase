@@ -1,0 +1,1 @@
+//cypress/supports/index.js

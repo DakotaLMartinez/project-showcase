@@ -103,10 +103,10 @@ function Navbar() {
           <RxAvatar className={profileIconClasses} />
         </button>
       )}
-      <div className={loginFormContainerClasses}>
+      <div id="login" className={loginFormContainerClasses}>
         <LoginForm onFinish={closeLoginForm} />
       </div>
-      <div className={signupFormContainerClasses}>
+      <div id="signup" className={signupFormContainerClasses}>
         <SignupForm onFinish={closeSignupForm} />
       </div>
       <div className={profileMenuContainerClasses}>

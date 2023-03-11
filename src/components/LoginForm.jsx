@@ -15,14 +15,16 @@ function LoginForm({ onFinish }) {
   const { login } = useAuth();
   const { notify } = useNotifications();
 
-  const onSubmit = (credentials) => {
-    login(credentials)
-      .then((message) => {
-        notify(message);
-        onFinish();
-        navigate("/profile")
-      })
-      .catch(notify)
+  const onSubmit = async (credentials) => {
+    try {
+      const loginMessage = await login(credentials)
+      notify(loginMessage);
+      onFinish();
+      navigate("/profile");
+    } catch (error) { 
+      console.error(error);
+      notify(error);
+    }
   };
 
   return (
@@ -53,11 +55,17 @@ function LoginForm({ onFinish }) {
         />
       </label>
       <div className="flex justify-between">
-        <input
+        <button
           type="submit"
           className="cursor-pointer bg-slate-700 rounded-md py-1 px-6 text-white"
-        />
-        <button type="button" onClick={onFinish} className="bg-slate-200 rounded-md py-1 px-6 text-slate-700 border border-slate-700">
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          onClick={onFinish}
+          className="bg-slate-200 rounded-md py-1 px-6 text-slate-700 border border-slate-700"
+        >
           Cancel
         </button>
       </div>

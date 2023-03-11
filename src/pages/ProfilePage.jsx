@@ -1,10 +1,10 @@
 import React from "react";
 import { RxAvatar } from "react-icons/rx";
-import { BsLinkedin, BsTwitter, BsGithub } from "react-icons/bs";
+import { BsTrashFill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
 
 import { useAuth } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 import ProjectCard from "../components/ProjectCard";
 import GitHubLink from "../components/ui/GitHubLink";
@@ -12,7 +12,8 @@ import LinkedInLink from "../components/ui/LinkedInLink";
 import TiwtterLink from "../components/ui/TwitterLink";
 
 function ProfilePage() {
-  const { currentUser } = useAuth();
+  const { currentUser, authFetch, logout } = useAuth();
+  const navigate = useNavigate();
 
   const githubLink = currentUser.github_url && (
     <GitHubLink url={currentUser.github_url} />
@@ -52,6 +53,21 @@ function ProfilePage() {
     );
   };
 
+  const handleProfileDelete = async () => {
+    if (window.confirm("Are you sure you want to delete your account? This will also delete all of your projects.")) {
+      try {
+        const deleteResponse = await authFetch(`${import.meta.env.VITE_API_URL}/signup`, { method: "DELETE" });
+        if (deleteResponse.ok) {
+          navigate("/");
+          notify({type: "success", message: "Successfully deleted your account."})
+        }
+      } catch (e) {
+        notify({type: "error", message: e.message})
+      }
+      
+    }
+  }
+
   return (
     <div className="md:grid md:grid-cols-3 xl:grid-cols-4 mt-4">
       <aside className="flex flex-col justify-center items-center md:items-start text-lg tracking-wide mb-4">
@@ -71,9 +87,14 @@ function ProfilePage() {
         <div className="mt-6">
           <Link className="flex items-center gap-2" to="/profile/edit">
             <Button>
-              <MdEdit as={"button"} className="text-2xl" /> Edit Profile
+              <MdEdit className="text-2xl" /> Edit Profile
             </Button>
           </Link>
+        </div>
+        <div className="mt-6">
+          <Button onClick={handleProfileDelete}>
+            <BsTrashFill className="text-2xl" /> Delete Profile
+          </Button>
         </div>
       </aside>
       <section className="px-0 md:col-span-2 xl:col-span-3 w-full">
@@ -84,12 +105,12 @@ function ProfilePage() {
             <h3 className="text-center sm:text-left border-b sm:mt-0 mt-6 w-full">
               No Projects Yet
             </h3>
-              <Link
-                to="/projects/new"
-                className="mt-8 inline-block text-center border py-2 px-4"
-              >
-                Add your first project
-              </Link>
+            <Link
+              to="/projects/new"
+              className="mt-8 inline-block text-center border py-2 px-4"
+            >
+              Add your first project
+            </Link>
           </>
         )}
       </section>

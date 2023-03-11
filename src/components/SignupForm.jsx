@@ -15,14 +15,17 @@ function SignupForm({ onFinish }) {
   const { signup } = useAuth();
   const { notify } = useNotifications();
 
-  const onSubmit = (userDeatils) => {
-    signup(userDeatils)
-      .then((message) => {
-        notify(message);
-        onFinish();
-        navigate("/profile");
-      })
-      .catch(notify);
+  const onSubmit = async (userDetails) => {
+    try {
+      const signupMessage = await signup(userDetails);
+
+      notify(signupMessage);
+      onFinish();
+      navigate("/profile");
+    } catch (error) {
+      console.error(error);
+      notify(error);
+    }
   };
 
   return (
