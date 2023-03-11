@@ -10,7 +10,6 @@ To get started with the project, follow these steps:
 Clone the repository: 
 ```
 git clone git@github.com:DakotaLMartinez/project-showcase.git
-
 ```
 Navigate your terminal into the project directory:
 ```
