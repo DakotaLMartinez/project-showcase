@@ -1,19 +1,22 @@
 import React from "react";
-import { RxAvatar } from "react-icons/rx";
 import { BsTrashFill } from "react-icons/bs";
 import { MdEdit } from "react-icons/md";
 
 import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationContext";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/ui/Button";
 import ProjectCard from "../components/ProjectCard";
 import GitHubLink from "../components/ui/GitHubLink";
 import LinkedInLink from "../components/ui/LinkedInLink";
 import TiwtterLink from "../components/ui/TwitterLink";
+import Avatar from "../components/ui/Avatar";
+import AvatarPlaceholder from "../components/ui/AvatarPlaceholder";
 
 function ProfilePage() {
-  const { currentUser, authFetch, logout } = useAuth();
   const navigate = useNavigate();
+  const { currentUser, authFetch, logout } = useAuth();
+  const { notify } = useNotifications();
 
   const githubLink = currentUser.github_url && (
     <GitHubLink url={currentUser.github_url} />
@@ -28,16 +31,11 @@ function ProfilePage() {
   );
 
   const renderAvatar = () => {
-    if (currentUser.avatar_url) {
-      return (
-        <img
-          className="rounded-full w-44 h-44 object-cover"
-          src={currentUser.avatar_url}
-          alt="Profile picture"
-        />
-      );
-    }
-    return <RxAvatar className="text-9xl" />;
+    return currentUser.avatar_url ? (
+      <Avatar src={currentUser.avatar_url} />
+    ) : (
+      <AvatarPlaceholder className="text-9xl" />
+    );
   };
 
   const renderProjects = () => {
@@ -54,19 +52,32 @@ function ProfilePage() {
   };
 
   const handleProfileDelete = async () => {
-    if (window.confirm("Are you sure you want to delete your account? This will also delete all of your projects.")) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This will also delete all of your projects."
+      )
+    ) {
       try {
-        const deleteResponse = await authFetch(`${import.meta.env.VITE_API_URL}/signup`, { method: "DELETE" });
+        const deleteResponse = await authFetch(
+          `${import.meta.env.VITE_API_URL}/signup`,
+          { method: "DELETE" }
+        );
         if (deleteResponse.ok) {
+          logout();
           navigate("/");
-          notify({type: "success", message: "Successfully deleted your account."})
+          notify({
+            type: "success",
+            message: "Successfully deleted your account.",
+          });
+          return;
         }
+        const error = await deleteResponse.json();
+        console.error(error);
       } catch (e) {
-        notify({type: "error", message: e.message})
+        notify({ type: "error", message: e.message });
       }
-      
     }
-  }
+  };
 
   return (
     <div className="md:grid md:grid-cols-3 xl:grid-cols-4 mt-4">
@@ -79,7 +90,10 @@ function ProfilePage() {
           </p>
         )}
 
-        <p className="flex gap-4 my-2 text-2xl hover:fill-cyan-700">
+        <p
+          data-cy="social-links"
+          className="flex gap-4 my-2 text-2xl hover:fill-cyan-700"
+        >
           {githubLink}
           {linkedinLink}
           {twitterLink}

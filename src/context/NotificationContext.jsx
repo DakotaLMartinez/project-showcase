@@ -21,6 +21,7 @@ const NotificationProvider = ({ children }) => {
     toast.custom(
       (t) => (
         <div
+          data-cy="notification"
           className={classNames([
             "flex flex-row items-center justify-between w-96 shadow-2x transition-all duration-500 relative",
             t.visible ? "top-0" : "-top-96",
