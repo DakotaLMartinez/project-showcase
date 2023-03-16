@@ -70,6 +70,7 @@ describe("Editing my profile", () => {
     cy.submitForm("#editProfile");
     cy.pathIncludes("/profile");
     cy.get("[data-cy=avatar]").should("exist");
+    cy.get("nav [data-cy=avatar]").should("exist");
     
     cy.contains("Edit Profile").click();
     cy.get("[data-cy=delete-avatar]").click();

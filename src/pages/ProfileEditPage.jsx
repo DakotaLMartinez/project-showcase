@@ -134,15 +134,15 @@ function ProfileEditPage() {
     imgUrl = URL.createObjectURL(avatar[0]);
     return (
       <>
-        <Avatar src={imgUrl} />
+        <Avatar className="rounded-full w-44 h-44 object-cover" src={imgUrl} />
         <span>{file.name}</span>
       </>
     );
   };
 
   const renderProfilePicOrFallback = (imgUrl) => {
-    return imgUrl ? (
-      <Avatar src={imgUrl} />
+    return (imgUrl && avatar !== null) ? (
+      <Avatar className="rounded-full w-44 h-44 object-cover" src={imgUrl} />
     ) : (
       <AvatarPlaceholder className="text-9xl" />
     );

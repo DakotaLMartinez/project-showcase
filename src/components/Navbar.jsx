@@ -7,12 +7,14 @@ import SignupForm from "./SignupForm";
 import { useAuth } from "../context/AuthContext";
 import Button from "./ui/Button";
 import ProfileMenu from "./ProfileMenu";
+import Avatar from "./ui/Avatar";
+import AvatarPlaceholder from "./ui/AvatarPlaceholder";
 
 function Navbar() {
   const [isLoginFormVisible, setIsLoginFormVisible] = useState(false);
   const [isSignupFormVisible, setIsSignupFormVisible] = useState(false);
   const [isProfileMenuVisible, setIsProfileMenuVisible] = useState(false);
-  const { isLoggedIn } = useAuth();
+  const { currentUser, isLoggedIn } = useAuth();
 
   const openLoginForm = () => {
     setIsLoginFormVisible(true);
@@ -100,7 +102,14 @@ function Navbar() {
         </div>
       ) : (
         <button onClick={openProfileMenu} className="mr-2" title="login">
-          <RxAvatar className={profileIconClasses} />
+          {currentUser.avatar_url ? (
+            <Avatar
+              className="rounded-full w-12 h-12 object-cover"
+              src={currentUser.avatar_url}
+            />
+          ) : (
+            <AvatarPlaceholder className={profileIconClasses} />
+          )}
         </button>
       )}
       <div id="login" className={loginFormContainerClasses}>

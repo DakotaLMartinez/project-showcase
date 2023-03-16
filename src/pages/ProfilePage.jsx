@@ -32,7 +32,10 @@ function ProfilePage() {
 
   const renderAvatar = () => {
     return currentUser.avatar_url ? (
-      <Avatar src={currentUser.avatar_url} />
+      <Avatar
+        className="rounded-full w-44 h-44 object-cover"
+        src={currentUser.avatar_url}
+      />
     ) : (
       <AvatarPlaceholder className="text-9xl" />
     );
