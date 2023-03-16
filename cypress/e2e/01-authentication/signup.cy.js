@@ -1,4 +1,10 @@
 describe("signup", () => {
+  beforeEach(() => {
+    cy.teardownTestUser({
+      email: "test@cypress.io",
+      password: "password"
+    })
+  })
   it("shows the profile page when successful", () => {
     cy.goto("/");
 
@@ -12,9 +18,7 @@ describe("signup", () => {
     // cy.get("email")
     cy.contains("test@cypress.io");
     cy.contains(/No projects yet/i);
-    cy.location("pathname").should("include", "/profile");
-
-    cy.contains("Delete Profile").click()
+    cy.pathIncludes("/profile");
   });
 
   it("displays an error message upon failure", () => {
