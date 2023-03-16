@@ -10,7 +10,7 @@ describe("login", () => {
 
     cy.contains("test@test.com");
     cy.contains(/No projects yet/i);
-    cy.location("pathname").should("include", "/profile");
+    cy.pathIncludes("/profile");
   });
 
   it("shows an error message when provided with invalid credentials", () => {
