@@ -9,7 +9,16 @@ export default defineConfig({
       on("file:preprocessor", vitePreprocessor());
     },
   },
+
   env: {
-    host: "http://localhost:5173"
+    host: "http://localhost:5173",
+  },
+
+  component: {
+    componentFileExtensions: ".jsx",
+    devServer: {
+      framework: "react",
+      bundler: "vite",
+    },
   },
 });
