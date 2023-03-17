@@ -1,6 +1,11 @@
-import React from "react";
+import { useState } from "react";
+import SignupForm from "../components/SignupForm";
+import Button from "../components/ui/Button";
+import { useAuth } from "../context/AuthContext";
 
 function HomePage() {
+  const [showSignupForm, setShowSignupForm] = useState(false);
+  const { isLoggedIn } = useAuth();
   return (
     <div className="py-4 sm:py-8 mt-6">
       <div className="min-h-80v grid text-center items-center justify-center py-4 px-8">
@@ -50,6 +55,27 @@ function HomePage() {
           </div>
         </section>
       </div>
+      {!isLoggedIn && (
+        <div className="min-h-30v">
+          {showSignupForm ? (
+            <div className="bg-slate-200 mt-8">
+              <section className="max-w-lg mx-auto py-12">
+                <SignupForm onFinish={() => setShowSignupForm(false)} />
+              </section>
+            </div>
+          ) : (
+            <div className="flex h-30v items-center justify-center">
+              <Button
+                className="text-2xl"
+                primary
+                onClick={() => setShowSignupForm(true)}
+              >
+                Sign Up Now
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
