@@ -72,56 +72,53 @@ function Navbar() {
   });
 
   return (
-    <nav className="bg-slate-50 py-4 flex items-center justify-between">
-      <div className="flex items-center">
-        <h4 className="px-4 text-slate-800">Project Showcase</h4>
-        <div className="hidden sm:block">
-          <NavLink end to="/">
-            Home
-          </NavLink>
-          <NavLink end to="/projects">
-            Projects
-          </NavLink>
-          <NavLink end to="/profile">
-            Profile
-          </NavLink>
-          <NavLink end to="/about">
-            About
-          </NavLink>
+    <>
+      <nav className="bg-slate-50 py-4 flex items-center justify-between fixed top-0 w-full">
+        <div className="flex items-center">
+          <h4 className="px-4 text-slate-800">Project Showcase</h4>
+          <div className="hidden sm:block">
+            <NavLink end to="/">
+              Home
+            </NavLink>
+            <NavLink end to="/projects">
+              Projects
+            </NavLink>      
+          </div>
         </div>
-      </div>
 
-      {!isLoggedIn ? (
-        <div className="flex justify-between w-40 mx-4">
-          <Button primary onClick={openSignupForm}>
-            Signup
-          </Button>
-          <Button outline secondary onClick={openLoginForm}>
-            Login
-          </Button>
+        {!isLoggedIn ? (
+          <div className="flex justify-between w-40 mx-4">
+            <Button primary onClick={openSignupForm}>
+              Signup
+            </Button>
+            <Button outline secondary onClick={openLoginForm}>
+              Login
+            </Button>
+          </div>
+        ) : (
+          <button onClick={openProfileMenu} className="mr-2" title="login">
+            {currentUser.avatar_url ? (
+              <Avatar
+                className="rounded-full w-12 h-12 object-cover"
+                src={currentUser.avatar_url}
+              />
+            ) : (
+              <AvatarPlaceholder className={profileIconClasses} />
+            )}
+          </button>
+        )}
+        <div id="login" className={loginFormContainerClasses}>
+          <LoginForm onFinish={closeLoginForm} />
         </div>
-      ) : (
-        <button onClick={openProfileMenu} className="mr-2" title="login">
-          {currentUser.avatar_url ? (
-            <Avatar
-              className="rounded-full w-12 h-12 object-cover"
-              src={currentUser.avatar_url}
-            />
-          ) : (
-            <AvatarPlaceholder className={profileIconClasses} />
-          )}
-        </button>
-      )}
-      <div id="login" className={loginFormContainerClasses}>
-        <LoginForm onFinish={closeLoginForm} />
-      </div>
-      <div id="signup" className={signupFormContainerClasses}>
-        <SignupForm onFinish={closeSignupForm} />
-      </div>
-      <div className={profileMenuContainerClasses}>
-        {isLoggedIn && <ProfileMenu onFinish={closeProfileMenu} />}
-      </div>
-    </nav>
+        <div id="signup" className={signupFormContainerClasses}>
+          <SignupForm onFinish={closeSignupForm} />
+        </div>
+        <div className={profileMenuContainerClasses}>
+          {isLoggedIn && <ProfileMenu onFinish={closeProfileMenu} />}
+        </div>
+      </nav>
+      <div className="h-20"></div>
+    </>
   );
 }
 

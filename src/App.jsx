@@ -6,13 +6,14 @@ import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import ProjectsPage from "./pages/ProjectsPage";
 import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
 import Navbar from "./components/Navbar";
 import { useNotifications } from "./context/NotificationContext";
 import { useAuth } from "./context/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import ProfileEditPage from "./pages/ProfileEditPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Container from "./components/ui/Container";
+import Footer from "./components/ui/Footer";
 
 function App() {
   const { notify, currentNotification } = useNotifications();
@@ -34,17 +35,38 @@ function App() {
         }}
       />
 
-      <section className="max-w-6xl mx-auto py-4 sm:py-8 mt-6">
+      <>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/projects/*" element={<ProjectsPage />} />
+          <Route
+            path="/projects/*"
+            element={
+              <Container>
+                <ProjectsPage />
+              </Container>
+            }
+          />
           <Route element={<ProtectedRoute isAllowed={isLoggedIn} />}>
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/profile/edit" element={<ProfileEditPage />} />
+            <Route
+              path="/profile"
+              element={
+                <Container>
+                  <ProfilePage />
+                </Container>
+              }
+            />
+            <Route
+              path="/profile/edit"
+              element={
+                <Container>
+                  <ProfileEditPage />
+                </Container>
+              }
+            />
           </Route>
-          <Route path="/about" element={<AboutPage />} />
         </Routes>
-      </section>
+        <Footer />
+      </>
     </>
   );
 }

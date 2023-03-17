@@ -1,8 +1,8 @@
 import { BsTwitter } from "react-icons/bs";
 
-function TiwtterLink({ url }) {
+function TiwtterLink({ url, className="" }) {
   return (
-    <a data-cy="twitter-link" href={url}>
+    <a className={className} data-cy="twitter-link" href={url}>
       <BsTwitter className="fill-amber-50 hover:fill-amber-200 transition" />
     </a>
   );
