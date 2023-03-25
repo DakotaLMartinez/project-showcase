@@ -84,7 +84,7 @@ function ProfilePage() {
 
   return (
     <div className="md:grid md:grid-cols-3 xl:grid-cols-4 mt-4">
-      <aside className="flex flex-col justify-center items-center md:items-start text-lg tracking-wide mb-4">
+      <aside className="flex flex-col mt-10 md:justify-start items-center md:items-start text-lg tracking-wide mb-4">
         <figure className="mb-4">{renderAvatar()}</figure>
         <p>{currentUser.name || "your name here"}</p>
         {currentUser.hide_email ? null : (

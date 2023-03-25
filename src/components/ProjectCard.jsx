@@ -9,7 +9,7 @@ function ProjectCard({ project, small = false }) {
 
   const aboutClasses = classNames("mt-2 whitespace-normal", {
     "sm:h-12 md:h-20": small,
-    "sm:h-16 md:h-20": !small,
+    "sm:h-20 md:h-24 lg:h-20": !small,
   });
 
   const placeHolderImageClasses = classNames("max-w-full py-4 object-cover", {
@@ -46,7 +46,7 @@ function ProjectCard({ project, small = false }) {
   };
 
   return (
-    <article className="border-slate-50 border rounded-lg shadow-black shadow-md bg-slate-900 text-slate-100">
+    <article className="flex flex-col h-full justify-between border-slate-50 border rounded-lg shadow-black shadow-md bg-slate-900 text-slate-100">
       <div className="px-4 pt-2">
         <figure className="flex justify-center">
           {renderPictureOrFallback(featured_image_url)}
