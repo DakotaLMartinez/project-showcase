@@ -60,9 +60,9 @@ function ProjectCard({ project, small = false }) {
             Read More
           </Button>
         </Link>
-        <div className="text-3xl pr-2">
+        {code_url && (<div className="text-3xl pr-2">
           <GitHubLink url={code_url} />
-        </div>
+        </div>)}
       </footer>
     </article>
   );
