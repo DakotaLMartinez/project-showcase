@@ -45,16 +45,13 @@ function ProfileMenu({ onFinish }) {
       </h6>
       <div className="sm:hidden flex flex-col border-b border-slate-400 my-2 ">
         <Link onClick={onFinish} to="/">
-            Home
+          Home
         </Link>
         <Link onClick={onFinish} to="/projects">
           Projects
         </Link>
         <Link onClick={onFinish} to="/profile">
           Profile
-        </Link>
-        <Link onClick={onFinish} className="mb-2" to="/about">
-          About
         </Link>
       </div>
       <Link to="/profile" onClick={onFinish}>
