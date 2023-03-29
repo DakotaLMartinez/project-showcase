@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { RxAvatar } from "react-icons/rx";
 import classNames from "classnames";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
