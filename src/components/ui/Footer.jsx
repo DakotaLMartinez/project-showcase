@@ -1,5 +1,4 @@
 import React from "react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import GitHubLink from "./GitHubLink";
 import LinkedInLink from "./LinkedInLink";
 import TiwtterLink from "./TwitterLink";
@@ -19,7 +18,6 @@ const Footer = () => {
           />
           <TiwtterLink
             url="https://twitter.com/dakotaleedev"
-            className="mr-4"
           />
         </div>
         <p className="text-center text-gray-500 text-sm">
