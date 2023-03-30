@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useRef, useState } from "react";
 import Tag from "./Tag";
 
-function TagsInput({ state, initialValue=[] }) {
+function TagsInput({ state, initialValue = [] }) {
   const [tags, setTags] = state;
   const input = useRef();
   const [text, setText] = useState("");
@@ -23,7 +23,9 @@ function TagsInput({ state, initialValue=[] }) {
   const onKeyUp = (e) => {
     if (["Enter", ","].includes(e.key)) {
       e.preventDefault();
-      if (e.target.value === "") { return }
+      if (e.target.value === "") {
+        return;
+      }
       if (tags.includes(e.target.value)) {
         setError("must be unique");
       } else {
@@ -37,21 +39,29 @@ function TagsInput({ state, initialValue=[] }) {
   const convertInputToTag = (value) => {
     onAddTag(value.trim());
     setText("");
-  }
+  };
 
   const onKeyDown = (e) => {
     if (e.key === "Tab" && e.target.value && !tags.includes(e.target.value)) {
       convertInputToTag(e.target.value);
     }
-    if (["Enter",",","Backspace"].includes(e.key)) {
+    if (["Enter", ",", "Backspace"].includes(e.key)) {
       if (e.key === "Backspace") {
-        e.target.value === "" && tags.length && onRemoveTag(tags[tags.length - 1])
+        e.target.value === "" &&
+          tags.length &&
+          onRemoveTag(tags[tags.length - 1]);
       } else {
         e.preventDefault();
       }
     }
   };
-  
+
+  const handleBlur = () => {
+    if (text.length > 0) {
+      convertInputToTag(text);
+    }
+  };
+
   const onClick = (e) => {
     input.current.focus();
   };
@@ -63,19 +73,20 @@ function TagsInput({ state, initialValue=[] }) {
 
   return (
     <>
-    <div className="border p-2 flex flex-wrap items-start" onClick={onClick}>
-        {tags.map(tag => (
+      <div className="border p-2 flex flex-wrap items-start" onClick={onClick}>
+        {tags.map((tag) => (
           <Tag key={tag} label={tag} onRemoveTag={onRemoveTag} />
-      ))}
-      <input
-        ref={input}
-        type="text"
-        onKeyUp={onKeyUp}
-        onKeyDown={onKeyDown}
-        onChange={onChange}
-        className={inputClassNames}
-        value={text}
-      />
+        ))}
+        <input
+          ref={input}
+          type="text"
+          onKeyUp={onKeyUp}
+          onKeyDown={onKeyDown}
+          onChange={onChange}
+          onBlur={handleBlur}
+          className={inputClassNames}
+          value={text}
+        />
       </div>
       <p className="text-red-400">{error}</p>
     </>
